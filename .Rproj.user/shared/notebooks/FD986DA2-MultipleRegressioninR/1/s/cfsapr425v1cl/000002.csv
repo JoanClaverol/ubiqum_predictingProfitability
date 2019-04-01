@@ -1,0 +1,3 @@
+"0","ex.Corr2 <- cor(ExProd.selection)"
+"0","corrplot(ex.Corr2, method = ""pie"", type = ""lower"", order = ""hclust"", col = brewer.pal(n = 8, name = ""RdBu""), "
+"0","         number.cex = 0.70, number.digits = 2, tl.cex = 1.5, tl.srt = 10, tl.col = ""black"")"

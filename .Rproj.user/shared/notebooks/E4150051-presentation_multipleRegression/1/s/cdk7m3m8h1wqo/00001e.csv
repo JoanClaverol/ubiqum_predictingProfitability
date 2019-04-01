@@ -1,0 +1,4 @@
+"0","# looking for NAs"
+"0","kable(ExProd[is.na(ExProd$BestSellersRank),]) %>% "
+"0","  kable_styling(bootstrap_options = ""responsive"", font_size = 13) %>%"
+"0","  scroll_box(width = ""100%"", height = ""500px"")"

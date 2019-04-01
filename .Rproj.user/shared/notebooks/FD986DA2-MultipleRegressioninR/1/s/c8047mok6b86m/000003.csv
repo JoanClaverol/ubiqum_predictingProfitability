@@ -1,0 +1,3 @@
+"0","# looking for NAs"
+"0","kable(mice::md.pattern(ExProd, plot = F)) %>% kable_styling(bootstrap_options = ""responsive"") %>%"
+"0","  scroll_box(width = ""100%"")"

@@ -1,0 +1,6 @@
+"0","if(require(""pacman"")==""FALSE""){"
+"0","  install.packages(""pacman"")"
+"0","} "
+"0","pacman::p_load(corrplot, tidyverse, caret, dunn.test, Hmisc,xtable, htmlTable, partykit, knitr, kableExtra, dummies, RColorBrewer, e1071, gbm)"
+"0","ExProd <- read_csv(""../data/existingproductattributes2017.2.csv"")"
+"0","NwProd <- read_csv(""../data/newproductattributes2017.2.csv"")"

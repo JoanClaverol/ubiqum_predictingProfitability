@@ -1,0 +1,6 @@
+"0","ExProd.clean2 <- ExProd.dummy %>% "
+"0","  filter(ProductTypeAccessories == 1 | ProductTypeLaptop == 1 | ProductTypeNetbook == 1 | ProductTypePC == 1)"
+"0","productTypes.analysed <- c(""ProductTypeAccessories"",""ProductTypeLaptop"",""ProductTypeNetbook"",""ProductTypePC"")"
+"0","features.corr <- c(productTypes.analysed,""ProductNum"",""x4StarReviews"",""x1StarReviews"",""PositiveServiceReview"",""NegativeServiceReview"",""Volume"",""Recommendproduct"")"
+"0","ExProd.selection <- ExProd.clean2 %>% "
+"0","  select(features.corr)"

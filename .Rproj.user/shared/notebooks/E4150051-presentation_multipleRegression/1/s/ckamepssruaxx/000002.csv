@@ -1,0 +1,13 @@
+"0","postResample(pred = predict(object = mod_lm, newdata = test),
+             obs = test$Volume)
+"
+"1","        RMSE "
+"1","    Rsquared "
+"1","         MAE "
+"1","
+"
+"1","1.196930e-12 "
+"1","1.000000e+00 "
+"1","5.355248e-13 "
+"1","
+"

@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1554064643586.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3EB1EF65",
+    "lastKnownWriteTime" : 1554070182,
+    "last_content_update" : 1554070182114,
+    "path" : "~/UbiqumCodeAcademy/projects/ubiqum_predictingProfitabilty/scripts/presentation_multipleRegression.Rmd",
+    "project_path" : "scripts/presentation_multipleRegression.Rmd",
+    "properties" : {
+        "cursorPosition" : "60,37",
+        "last_setup_crc32" : "55E02A30c4e2d899",
+        "scrollLine" : "50",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

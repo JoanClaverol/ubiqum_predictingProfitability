@@ -1,0 +1,4 @@
+"0","ExProd %>%"
+"0","  filter(Volume > 6000 | x2StarReviews > 100 | x1StarReviews > 1500) -> outliers"
+"0","kable(outliers) %>% kable_styling(bootstrap_options = ""responsive"") %>%"
+"0","  scroll_box(width = ""100%"")"
