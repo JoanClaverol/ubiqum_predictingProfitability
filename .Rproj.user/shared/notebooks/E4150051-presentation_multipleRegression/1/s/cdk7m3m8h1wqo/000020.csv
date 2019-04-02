@@ -1,3 +1,0 @@
-"0","ExProd$BestSellersRank <- NULL"
-"0","rownames(ExProd) <- ExProd$ProductNum"
-"2","Setting row names on a tibble is deprecated."
