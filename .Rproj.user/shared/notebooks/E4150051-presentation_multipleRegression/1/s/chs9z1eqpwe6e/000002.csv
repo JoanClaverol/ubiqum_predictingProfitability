@@ -1,2 +1,0 @@
-"0","fact_var <- c(""ProductType"",""ProductNum"")"
-"0","ExProd[fact_var] <- apply(ExProd[fact_var], 2, as.factor)"

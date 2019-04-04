@@ -2,7 +2,10 @@
 title: "Multiple regression in R"
 author: "Joan Claverol"
 date: "31 de marzo de 2019"
-output: ioslides_presentation
+output: 
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
 ---
 
 ```{r setup, include=FALSE}
@@ -15,156 +18,302 @@ if(require("pacman")=="FALSE"){
 } 
 
 pacman::p_load(corrplot, tidyverse, caret, dunn.test, Hmisc,xtable, htmlTable, 
-               partykit, knitr, kableExtra, dummies, RColorBrewer, e1071, gbm)
+               partykit, knitr, kableExtra, RColorBrewer, e1071, gbm, 
+               tibble, modelr, magrittr, VIM, fastDummies, plotly)
 
-ExProd <- read_csv("../data/existingproductattributes2017.2.csv")
+ex_prod <- read_csv("../data/existingproductattributes2017.2.csv")
 NwProd <- read_csv("../data/newproductattributes2017.2.csv")
 ```
 
-
 ## Task overview
 
-What data do we have? New product attributes and existing product attributes.
+**BUSINESS QUESTION:** Which are the top 5 products that are going to be more profitable for the company?
+
+What data do we have? 
+
+New product attributes and existing product attributes.
 
 - Predicting sales of four different product types: PC, Laptops, Netbooks and Smartphones
 - Assessing the impact services reviews and customer reviews have on sales of different product types
 
 ## Index
 
-* Data cleaning
+1. Data cleaning
 
-* Data exploration
+2. Data exploration
 
-* Pre-process: feature selection (correlation matrix) & feature engineering
+3. Pre-process: feature selection (correlation matrix) & feature engineering
 
-* Modalization: linear regresion, KNN, SVM, Random forest, GBM
+4. Modalization: linear regresion, KNN, SVM, Random forest, GBM
 
-* Error analysis
+5. Error analysis
 
 ## Data cleaning
 
 Transformation to factor:
 
-```{r transformation to factors}
+```{r transformation to factors, echo=TRUE}
 fact_var <- c("ProductType","ProductNum")
-ExProd[fact_var] <- apply(ExProd[fact_var], 2, as.factor)
+ex_prod[,fact_var] <- apply(ex_prod[,fact_var], 2, as.factor)
 ```
 
+Giving names to the rows: 
 
-## Data cleaning: missing values
+```{r changing row names with product number, echo=TRUE}
 
-```{r looking for NAs}
-# looking for NAs
-kable(ExProd[is.na(ExProd$BestSellersRank),]) %>% 
-  kable_styling(bootstrap_options = "responsive", font_size = 13) %>%
-  scroll_box(width = "100%", height = "500px")
-ExProd$BestSellersRank <- NULL
+ex_prod <- tibble::column_to_rownames(.data = ex_prod,
+                                     var = "ProductNum")
+ex_prod$ProductNum <- NULL
 ```
 
-## 1st data expl.: Blackwell business
+## Data cleaning: missing values with VIM {.flexbox .vcenter}
+
+```{r looking for NAs, message=F, warning=F}
+aggr(ex_prod, col=c('lightblue','red'), numbers=TRUE, sortVars=TRUE, 
+     labels=names(data), cex.axis=.7,  gap=3, only.miss = F, 
+     ylab=c("Histogram of missing data","Pattern"),plot = T)
+# change blue color
+ex_prod$BestSellersRank <- NULL
+```
+
+## 1st data expl.: Blackwell business {.flexbox .vcenter}
 
 ```{r business overview, warning=F}
 # Is the volume related to the categories?
 
-ExProd %>%
+ex_prod %>%
   group_by(ProductType) %>%
   summarise(Total_Volume = sum(Volume)) %>%
   arrange(desc(Total_Volume)) -> Volume_category
 
 # Number of products by category
 
-ExProd %>%
+ex_prod %>%
   group_by(ProductType) %>%
   summarise(Number_Products = n()) %>%
   arrange(desc(Number_Products)) -> NumProd_category
 
 # Profit per category
 
-ExProd %>%
+ex_prod %>%
   group_by(ProductType) %>%
   summarise(Mean_Profit_Perc = round(mean(ProfitMargin),2)) %>%
   arrange(desc(Mean_Profit_Perc)) -> Profit_category
 
-# # Show the information into one table
-# kable(Profit_category %>%
-#         left_join(NumProd_category, by = 'ProductType') %>%
-#         left_join(Volume_category, by = 'ProductType') %>%
-#         mutate(Total_Profits = Mean_Profit_Perc*Total_Volume) %>% 
-#         arrange(desc(Total_Profits)) %>% 
-#         mutate(Total_Profits = paste0(Total_Profits, " €")),
-#       col.names = c("", "Profit", "Nº products", 
-#                     "Total Volume", "Total Profits")) %>% 
-#   kable_styling(bootstrap_options = "responsive", font_size = 14) %>% 
-#   column_spec(1, bold = T, include_thead = T) %>% 
-#   column_spec(5, background = "#f0f5f0")
-
-# Create a graph to understand 
+# Create a graph to understand Blackwell's business
 Profit_category %>%
   left_join(NumProd_category, by = 'ProductType') %>%
   left_join(Volume_category, by = 'ProductType') %>%
-  mutate(Total_Profits = Mean_Profit_Perc*Total_Volume) %>% 
-  arrange(Total_Profits) %>%
+  mutate(Total_Profits = Mean_Profit_Perc*Total_Volume, 
+         Total_Profits_Dol = paste(round((Total_Profits), 0),"$")) %>% 
+  arrange(Total_Profits) %>% 
   ggplot(aes(x = reorder(ProductType, Total_Profits))) +
-    geom_col(aes(y = -Total_Profits), fill = "dodgerblue3") +
-    geom_col(aes(y = Total_Volume), fill = "gold") +
+    geom_col(aes(y = -Total_Profits), fill = "gold") +
+    geom_col(aes(y = Total_Volume), fill = "dodgerblue3") +
     coord_flip() +
-    scale_y_continuous(limits = c(-5000,27000), labels = NULL) +
+    scale_y_continuous(limits = c(-6000,27000), labels = NULL) +
     geom_label(aes(x = ProductType, y = -Total_Profits, 
-                   label = round((Total_Profits), 0)),
+                   label = Total_Profits_Dol),
                hjust = 1, 
-               vjust = 0.5, 
-               colour = "dodgerblue3", 
-               fill = NA, 
-               label.size = NA, 
-               size = 3) +
-    geom_label(aes(x = ProductType, y = Total_Volume, 
-                   label = round(Total_Volume, 0)),
-               hjust = 0, 
-               vjust = 0.5, 
+               vjust = 0.4, 
                colour = "goldenrod3", 
                fill = NA, 
                label.size = NA, 
-               size = 3) +
-    labs(title = "Total Profits vs Total Volume") +
+               size = 3.5) +
+    geom_label(aes(x = ProductType, y = Total_Volume, 
+                   label = round(Total_Volume, 0)),
+               hjust = 0, 
+               vjust = 0.4, 
+               colour = "dodgerblue4", 
+               fill = NA, 
+               label.size = NA, 
+               size = 3.5) +
+    labs(title = "Total Profits ($) vs Total Volume (items)") +
     theme(legend.position = "bottom", 
           legend.title = element_blank(), 
           plot.title = element_text(hjust = 0.5), 
-          plot.subtitle = element_text(hjust = 0.5)) + theme_minimal() -> p1
+          plot.subtitle = element_text(hjust = 0.5)) + theme_void() -> p1
 p1 + theme(axis.title.x = element_blank(), 
-           axis.title.y = element_blank())
+           axis.title.y = element_blank(), 
+           axis.text.y = element_text()) +
+  geom_label(aes(x = "Printer", y = 10000, 
+                 label = "The 45% of the sales comes from\naccessories, but they only\nrespresents the 15% of the total\nprofit"),
+             hjust = 0, 
+             vjust = 0.5, 
+             lineheight = 0.8,
+             colour = "dodgerblue4", 
+             fill = "white", 
+             label.size = NA, 
+             size = 4.5) +
+  geom_label(aes(x = "Laptop", y = 10000, 
+                 label = "Extended warranty generates the\n46% of the total profit, and\nrepresents the 18% of the sales"),
+             hjust = 0, 
+             vjust = 0.5, 
+             lineheight = 0.8,
+             colour = "goldenrod3", 
+             fill = "white", 
+             label.size = NA, 
+             size = 4.5)
   
 ```
 
+## 1st data expl.: Volume distribution {.flexbox .vcenter}
+
+```{r boxplot to understand the distribution of the volume, warning=FALSE, message=FALSE}
+# creating a function to find outliers
+is_outlier <- function(x) {
+  return(x < quantile(x, 0.25) - 1.5 * IQR(x) | x > quantile(x, 0.75) + 1.5 * IQR(x))
+}
+
+# creating the graphs
+ex_prod %>% 
+  rownames_to_column(var = "productNum") %>% 
+  group_by(ProductType) %>%
+  mutate(outlier=ifelse(is_outlier(Volume),as.numeric(productNum),
+                        as.numeric(NA))) %>%
+  ggplot(aes(ProductType, Volume)) + 
+    geom_boxplot(outlier.color = "red", col = "dodgerblue3") +
+    geom_label(aes(label = outlier), hjust = 0, 
+               vjust = 0, check_overlap = TRUE,
+               colour = "red", 
+               fill = NA, 
+               label.size = NA, 
+               size = 3.5) +
+    labs(title = "Volume distribution in relation to product type") +
+    theme_classic() + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 11), 
+          axis.text.y = element_text(size = 11), legend.position = "none",
+          axis.title.x = element_blank(), axis.title.y = element_blank()) +
+    geom_label(aes(x = "Laptop", y = 10000, 
+                   label = "Accessories: median very close to 0, and the product\n150 is an anomaly."), 
+               label.size = NA, 
+               size = 4.5, 
+               colour = "#555555", 
+               hjust = 0, 
+               vjust = 0.5, 
+               lineheight = 0.8) +
+    geom_label(aes(x = "Laptop", y = 8000, 
+                   label = "Extended warranty: the range is very gathered and\nthere are two products, 132 and 133, close to 0."), 
+               label.size = NA, 
+               size = 4.5, 
+               colour = "#555555", 
+               hjust = 0, 
+               vjust = 0.5, 
+               lineheight = 0.8) +
+    geom_label(aes(x = "Laptop", y = 6000, 
+                   label = "GameConsole: the highest sells in the company and\nmore stable."), 
+               label.size = NA, 
+               size = 4.5, 
+               colour = "#555555", 
+               hjust = 0, 
+               vjust = 0.5, 
+               lineheight = 0.8)
+```
 
 ## 1st modalisation: linear regression
 
-```{r train and test creation, warning=F, message=F}
-set.seed(123)
-train_id <- createDataPartition(y = ExProd$Volume,
-                                p = 0.75, 
-                                list = F)
-train <- ExProd[train_id,]
-test <- ExProd[-train_id,]
+```{r train and test creation, warning=F, message=F, echo=T}
+# train and test
+train_id <- createDataPartition(y = ex_prod$Volume, p = 0.75, list = F)
+train <- ex_prod[train_id,]
+test <- ex_prod[-train_id,]
 
-# giving product number to row names
-rownames(test) <- test$ProductNum
-rownames(train) <- train$ProductNum
-
-# model with linear regression
+# create linear regression model
 mod_lm <- lm(formula = Volume ~ ., data = train)
 
+# model performance
+postResample(pred = predict(object = mod_lm, newdata = test),
+             obs = test$Volume)
 ```
 
-## 1st error check: error visualization
+Main predictors: 
 
-```{r warning=F, message=F}
-# par(mfrow = c(2,2))
-# plot(mod_lm)
-# par(mfrow = c(1,1))
-```
+1. x5StarReviews
+2. ProductTypeGameConsole 
+
+## 2n pre-process: feature selection {.flexbox .vcenter}
+
+
 
 ```{r}
-# postResample(pred = predict(object = mod_lm, newdata = test),
-#              obs = test$Volume)
+# Dummy variables 
+ex_prod_dummy <- ex_prod %>% 
+  fastDummies::dummy_columns(remove_first_dummy = FALSE) %>% 
+  select(-ProductType, -ShippingWeight, -ProductDepth,
+         -ProductWidth, -ProductHeight, -ProductType_Accessories,
+         -ProductType_Software, -ProductType_Display, -ProductType_Printer,
+         -ProductType_PrinterSupplies, -ProductType_ExtendedWarranty,
+         -ProductType_Tablet, -ProductType_GameConsole) %>% 
+  rename(PC = ProductType_PC, 
+         Laptop = ProductType_Laptop,
+         Netb = ProductType_Netbook,
+         Smart_Ph = ProductType_Smartphone, 
+         x5 = x5StarReviews, 
+         x4 = x4StarReviews,
+         x3 = x3StarReviews, 
+         x2 = x2StarReviews, 
+         x1 = x1StarReviews, 
+         Pos_Ser = PositiveServiceReview, 
+         Neg_Ser = NegativeServiceReview,
+         Recomend = Recommendproduct,
+         Profit_M = ProfitMargin,
+         Vol = Volume)
+rownames(ex_prod_dummy) <- rownames(ex_prod)
+
+
+# Correlation plot
+ex_prod_corr <- cor(ex_prod_dummy)
+corrplot(ex_prod_corr, method = "pie", 
+         type = "lower", order = "hclust", 
+         col = brewer.pal(n = 8, name = "RdBu"),
+         number.cex = 0.9, number.digits = 2, 
+         tl.cex = 1.2, tl.srt = 1, tl.col = "black")
+```
+
+## 2nd modalisation: linear regression {.bigger}
+
+```{r 2nd model creation, warning=FALSE, message=FALSE}
+# creating trainin and testing with the features selected
+set.seed(123)
+train_id <- createDataPartition(y = ex_prod_dummy$Vol,
+                                p = 0.75,
+                                list = F)
+train <- ex_prod_dummy[train_id,]
+test <- ex_prod_dummy[-train_id,]
+
+# model creation
+mod_2lm <- lm(formula = Vol ~., data = train)
+
+# metrics
+postResample(pred = predict(object = mod_2lm, newdata = test),
+             obs = test$Vol)
+```
+
+Main predictors: 
+
+1. 5 stars
+2. Product type: PC
+3. Price
+
+The model is overfitted again. 
+
+## 3rd data exploration: stars analysis {.flexbox .vcenter}
+
+```{r plot the stars volume relation, warning=F, message=F}
+ex_prod_dummy %>%
+  rownames_to_column(var = "product_num") %>% 
+  rowwise() %>%
+  mutate(total_stars = sum(x5, x4, x3, x2, x1)) %>%
+  gather(key = "num_stars", value = "value", x5, x4, x3, x2, x1) %>% 
+  ggplot(aes(x = value, y = Vol, color = num_stars)) +
+    geom_point() +
+    geom_smooth(se = F, size = 0.15) +
+    theme_classic() +
+    theme(axis.text.y = element_text(),
+          axis.text.x = element_text(), 
+          legend.title = element_blank()) +
+    labs(title = "Total sales in relation of the star number", 
+         y = "Volume", x = "Number of stars") -> stars_plot
+ggplotly(stars_plot)
 ```
 

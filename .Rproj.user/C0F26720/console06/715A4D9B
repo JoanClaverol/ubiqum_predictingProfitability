@@ -1,56 +1,5 @@
 [0m[0KMicrosoft Windows [Versión 10.0.17134.648][0K[?25l
 (c) 2018 Microsoft Corporation. Todos los derechos reservados.[0K
 [0K
-C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git s[0K[?25ht[0Ka[0Kt[0Ku[0Ks[0K]0;  - git  status[?25l
-[0K[?25hOn branch master[0K[?25l
-Changes not staged for commit:[0K
-  (use "git add/rm <file>..." to update what will be committed)[0K
-  (use "git checkout -- <file>..." to discard changes in working directory)[0K
-[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/console06/715A4D9B[0m[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/console06/INDEX001[0m[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/sources/prop/63FDDC8C[0m[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/sources/prop/D59AEFCC[0m[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/sources/prop/INDEX[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/1A56C9A5-contents[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/348C5353[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/348C5353-contents[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/3EB1EF65[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/3EB1EF65-contents[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/724C80B7[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/724C80B7-contents[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/ADAC0D65-contents[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/BA37E6B7[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/BA37E6B7-contents[0m[0K
-        [0;31mdeleted:    .Rproj.user/C0F26720/sources/s-55E02A30/lock_file[0m[0K
-        [0;31mmodified:   .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/C0F2672055E02A30/chunks.json[0m[0K
-        [0;31mmodified:   .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cb0abqgai2mik/000002.csv[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cc9uy5bogapsw/000004.csv[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cdk7m3m8h1wqo/00001e.csv[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cdk7m3m8h1wqo/00001f.html[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cdk7m3m8h1wqo/00001f.json[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cdk7m3m8h1wqo/00001f.metadata[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cdk7m3m8h1wqo/000020.csv[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/ch7zi358sbjuy/00000b.csv[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/ch7zi358sbjuy/00000c.html[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/ch7zi358sbjuy/00000c.json[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/ch7zi358sbjuy/00000c.metadata[0m[0K
-        [0;31mmodified:   .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/chunks.json[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cykveuyegjxjt/000032.csv[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cykveuyegjxjt/000033.error[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cykveuyegjxjt/000034.metadata[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/cykveuyegjxjt/000034.png[0m[0K
-        [0;31mdeleted:    .Rproj.user/shared/notebooks/FD986DA2-MultipleRegressioninR/1/C0F2672055E02A30/chunks.json[0m[0K
-        [0;31mmodified:   .Rproj.user/shared/notebooks/paths[0m[0K
-        [0;31mmodified:   scripts/presentation_multipleRegression.Rmd[0m[0K
-        [0;31mmodified:   scripts/presentation_multipleRegression.html[0m[0K
-[0K
-Untracked files:[0K
-  (use "git add <file>..." to include in what will be committed)[0K
-[0K
-        [0;31m.Rhistory[0m[0K
-        [0;31m.gitignore[0m[0K
-[0K
-no changes added to commit (use "git add" and/or "git commit -a")[0K
-[0K[?25h]0; [?25l
-C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git a[0K[?25hd[0Kd[0K[100G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git add -[0K[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git add[0K[100G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git add .[0K[?25h
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git a[0K[?25hd[0Kd[0K[100G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git add .[0K[?25h]0;  - git  add .[?25l
+[0K[?25h
