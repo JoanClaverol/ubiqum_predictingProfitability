@@ -210,9 +210,9 @@ ex_prod %>%
 
 ## 1st modalisation: linear regression
 
-```{r train and test creation, warning=F, message=F, echo=T}
+```{r 1st model creatin, warning=F, message=F, echo=T}
 # train and test
-train_id <- createDataPartition(y = ex_prod$Volume, p = 0.75, list = F)
+train_id <- createDataPartition(y = ex_prod$Volume, p = 0.80, list = F)
 train <- ex_prod[train_id,]
 test <- ex_prod[-train_id,]
 
@@ -229,7 +229,7 @@ Main predictors:
 1. x5StarReviews
 2. ProductTypeGameConsole 
 
-## 2n pre-process: feature selection {.flexbox .vcenter}
+## 2nd pre-process: feature selection {.flexbox .vcenter}
 
 
 
@@ -274,7 +274,7 @@ corrplot(ex_prod_corr, method = "pie",
 # creating trainin and testing with the features selected
 set.seed(123)
 train_id <- createDataPartition(y = ex_prod_dummy$Vol,
-                                p = 0.75,
+                                p = 0.80,
                                 list = F)
 train <- ex_prod_dummy[train_id,]
 test <- ex_prod_dummy[-train_id,]
@@ -326,15 +326,14 @@ ggplotly(stars_plot) %>%
 ```
 
 ```{r outlier extraction}
-ex_prod_dummy %<>% 
+ex_prod_dummy %<>%
   rownames_to_column(var = "product_num") %>% 
-  filter(!(product_num %in% c("123","198","150"))) %>% 
-  select(-product_num)
+  filter(!(product_num %in% c("123","198","150")))
 ```
 
-## 3rd pre-process: feature engineering 
+## 3rd pre-process: feature engineering {.flexbox .vcenter}
 
-```{r volumen total stars relation}
+```{r volumen total stars relation, message=F, warning=F}
 # 
 ex_prod_dummy %<>% 
   rowwise() %>% 
@@ -343,22 +342,35 @@ ex_prod_dummy %<>%
 ex_prod_dummy %>% 
   ggplot(aes(x = total_stars, y = Vol)) +
     geom_point(color = "dodgerblue4") +
+    geom_smooth(alpha=0.3, size=0, span=0.5, se = F) +
+    geom_label(aes(x = 650, y = 900, 
+                   label = "There is a clear positive correlation\nbetween the total number of starts\na product has with the number of sales"),
+             hjust = 0, 
+             vjust = 0.5, 
+             lineheight = 0.8,
+             colour = "#555555", 
+             fill = "white", 
+             label.size = NA, 
+             size = 4.5 ) +
     theme_classic() +
     theme(axis.text.y = element_text(),
           axis.text.x = element_text(), 
           legend.title = element_blank()) +
-    labs(title = "Total sales vs total number of stars", 
-         y = "Volume", x = "number of stars (total)")
+    labs(title = "Total sales vs total number of stars by product", 
+         y = "Volume", x = "total number of stars")
 ```
 
-```{r}
+## 3rd modalisation: linear regression
+
+```{r 3rd model with linear regression}
 ex_prod_dummy %<>% 
-  select(-x5, -x4, -x3, -x2, -x1)
+  select(-x5, -x4, -x3, -x2, -x1, -Profit_M, -Price) %>% 
+  column_to_rownames(var = "product_num")
 
 # creating trainin and testing with the features selected
 set.seed(123)
 train_id <- createDataPartition(y = ex_prod_dummy$Vol,
-                                p = 0.75,
+                                p = 0.80,
                                 list = F)
 train <- ex_prod_dummy[train_id,]
 test <- ex_prod_dummy[-train_id,]
@@ -370,4 +382,68 @@ mod_3lm <- lm(formula = Vol ~., data = train)
 postResample(pred = predict(object = mod_3lm, newdata = test),
              obs = test$Vol)
 ```
+
+| Variables used            | Main predictors         |
+| ------------------------- |-------------------------|
+| - Total number of stars   | - Total number of stars |
+| - Positive service        | - Positive service      |
+| - Negative serice         | - Negative service      |
+| - Recommended product     | - Recommended product   |
+| - PC                      |                         |
+| - Laptop                  |                         |
+| - Netbook                 |                         |
+| - Smart Phone             |                         |
+
+## 3rd error check: errors in all the ex. prod {.flexbox .vcenter}
+
+```{r error visualization 3rd model, warning=FALSE}
+# adding product number to datasets and creating one only with categories
+ex_prod$product_num <- rownames(ex_prod)
+ex_prod_dummy$product_num <- rownames(ex_prod_dummy)
+product_cat <- ex_prod %>% select(product_num, ProductType)
+
+# define the treshold of the errors and relevant categories
+treshold <- 80
+rel_categories <- c("PC","Laptop","Smartphone","Netbooks")
+
+# error plot
+ex_prod_dummy %>%
+  full_join(y = product_cat, by = "product_num") %>% 
+  add_predictions(model = mod_3lm, var = "pred") %>% 
+  add_residuals(model = mod_3lm, var = "resid") %>% 
+  ggplot(aes(x = pred, y = Vol)) +
+    geom_point(aes(color = (abs(resid)>treshold & 
+                              ProductType %in% rel_categories))) + 
+    geom_abline(intercept = 0, slope = 1, color = "darkgray") +
+    geom_label(aes(label = if_else(abs(resid)>treshold & 
+                              ProductType %in% rel_categories, 
+                              product_num, NULL)),
+               hjust = 0, 
+               vjust = 0.4, 
+               colour = "red2", 
+               fill = NA, 
+               label.size = NA, 
+               size = 3.5) +
+    geom_label(aes(x = 1500, y = 800,
+                   label = paste0("PC, Smartphones, Laptops\nor Netbooks with errors\nhigher than +/-",treshold," items.")),
+               label.size = NA,
+               size = 4.5,
+               colour = "red2",
+               hjust = 0,
+               vjust = 0.5,
+               lineheight = 0.8) +
+    labs(title = "Error visualizations",
+         x = "Predicted volume",
+         y = "Volume") +
+    scale_color_manual(values = c("grey","red")) +
+    theme_classic() +
+    theme(axis.text.y = element_text(),
+          axis.text.x = element_text(), 
+          legend.title = element_blank(), 
+          legend.position = "none")
+```
+
+
+
+
 
