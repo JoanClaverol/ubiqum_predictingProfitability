@@ -87,14 +87,12 @@ ex_prod %>%
   arrange(desc(Total_Volume)) -> Volume_category
 
 # Number of products by category
-
 ex_prod %>%
   group_by(ProductType) %>%
   summarise(Number_Products = n()) %>%
   arrange(desc(Number_Products)) -> NumProd_category
 
 # Profit per category
-
 ex_prod %>%
   group_by(ProductType) %>%
   summarise(Mean_Profit_Perc = round(mean(ProfitMargin),2)) %>%
@@ -297,23 +295,79 @@ Main predictors:
 
 The model is overfitted again. 
 
-## 3rd data exploration: stars analysis {.flexbox .vcenter}
+## 3rd pre-process: outlier detection in stars {.flexbox .vcenter}
 
 ```{r plot the stars volume relation, warning=F, message=F}
 ex_prod_dummy %>%
-  rownames_to_column(var = "product_num") %>% 
-  rowwise() %>%
-  mutate(total_stars = sum(x5, x4, x3, x2, x1)) %>%
-  gather(key = "num_stars", value = "value", x5, x4, x3, x2, x1) %>% 
-  ggplot(aes(x = value, y = Vol, color = num_stars)) +
+  rownames_to_column(var = "product_num") %>%
+  gather(key = "star_type", value = "num_stars", x5, x4, x3, x2, x1) %>% 
+  ggplot(aes(x = num_stars, y = Vol, color = star_type)) +
     geom_point() +
     geom_smooth(se = F, size = 0.15) +
     theme_classic() +
     theme(axis.text.y = element_text(),
           axis.text.x = element_text(), 
           legend.title = element_blank()) +
-    labs(title = "Total sales in relation of the star number", 
+    labs(title = "Total sales vs type of star", 
          y = "Volume", x = "Number of stars") -> stars_plot
-ggplotly(stars_plot)
+ggplotly(stars_plot) %>% 
+  layout(annotations = list(x = 2801, y = 11204, text = "Prod. 150", 
+                            showarrow = TRUE, arrowcolor = "#555555",
+                            arrowsize = 0.3, font = list(size = 10))) %>% 
+  layout(annotations = list(x = 1759, y = 7036, text = "Prod. 198", 
+                            showarrow = TRUE, arrowcolor = "#555555",
+                            arrowsize = 0.3, font = list(size = 10), 
+                            ax= 0, ay = -20)) %>%
+  layout(annotations = list(x = 1654, y = 2052, text = "Prod. 123", 
+                            showarrow = TRUE, arrowcolor = "#555555",
+                            arrowsize = 0.3, font = list(size = 10),
+                            ax = 10, ay = 20))
+  
+```
+
+```{r outlier extraction}
+ex_prod_dummy %<>% 
+  rownames_to_column(var = "product_num") %>% 
+  filter(!(product_num %in% c("123","198","150"))) %>% 
+  select(-product_num)
+```
+
+## 3rd pre-process: feature engineering 
+
+```{r volumen total stars relation}
+# 
+ex_prod_dummy %<>% 
+  rowwise() %>% 
+  mutate(total_stars = sum(x5, x4, x3, x2, x1)) 
+
+ex_prod_dummy %>% 
+  ggplot(aes(x = total_stars, y = Vol)) +
+    geom_point(color = "dodgerblue4") +
+    theme_classic() +
+    theme(axis.text.y = element_text(),
+          axis.text.x = element_text(), 
+          legend.title = element_blank()) +
+    labs(title = "Total sales vs total number of stars", 
+         y = "Volume", x = "number of stars (total)")
+```
+
+```{r}
+ex_prod_dummy %<>% 
+  select(-x5, -x4, -x3, -x2, -x1)
+
+# creating trainin and testing with the features selected
+set.seed(123)
+train_id <- createDataPartition(y = ex_prod_dummy$Vol,
+                                p = 0.75,
+                                list = F)
+train <- ex_prod_dummy[train_id,]
+test <- ex_prod_dummy[-train_id,]
+
+# model creation
+mod_3lm <- lm(formula = Vol ~., data = train)
+
+# metrics
+postResample(pred = predict(object = mod_3lm, newdata = test),
+             obs = test$Vol)
 ```
 
