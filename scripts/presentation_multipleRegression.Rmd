@@ -2,10 +2,12 @@
 title: "Multiple regression in R"
 author: "Joan Claverol"
 date: "31 de marzo de 2019"
-output: 
+output:
   ioslides_presentation:
-    widescreen: true
-    smaller: true
+    background: white
+    smaller: yes
+    widescreen: yes
+    css: https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
 ---
 
 ```{r setup, include=FALSE}
@@ -22,7 +24,7 @@ pacman::p_load(corrplot, tidyverse, caret, dunn.test, Hmisc,xtable, htmlTable,
                tibble, modelr, magrittr, VIM, fastDummies, plotly)
 
 ex_prod <- read_csv("../data/existingproductattributes2017.2.csv")
-NwProd <- read_csv("../data/newproductattributes2017.2.csv")
+new_prod <- read_csv("../data/newproductattributes2017.2.csv")
 ```
 
 ## Task overview
@@ -44,7 +46,7 @@ New product attributes and existing product attributes.
 
 3. Pre-process: feature selection (correlation matrix) & feature engineering
 
-4. Modalization: linear regresion, KNN, SVM, Random forest, GBM
+4. Modalization: linear regresion, KNN, SVM and Random forest
 
 5. Error analysis
 
@@ -208,7 +210,7 @@ ex_prod %>%
           axis.title.x = element_blank(), axis.title.y = element_blank())
 ```
 
-## 1st modalisation: linear regression
+## 1st modalization: linear regression {.flexbox .vcenter}
 
 ```{r 1st model creatin, warning=F, message=F, echo=T}
 # train and test
@@ -218,10 +220,22 @@ test <- ex_prod[-train_id,]
 
 # create linear regression model
 mod_lm <- lm(formula = Volume ~ ., data = train)
+```
 
+```{r results 1st model, message=F, warning=F}
 # model performance
-postResample(pred = predict(object = mod_lm, newdata = test),
-             obs = test$Volume)
+train_res_mod1 <- postResample(pred = predict(object = mod_lm, newdata = train),
+                             obs = train$Volume)
+results_mod1 <- postResample(pred = predict(object = mod_lm, newdata = test),
+                             obs = test$Volume)
+
+# creating a grid with the different results
+table_mod1 <- tribble(~metric,   ~train           ,        ~test     , 
+                      "RMSE" , round(train_res_mod1[[1]],2), round(results_mod1[[1]],2),      
+                      "R^2"  , paste(round(train_res_mod1[[2]]*100,2),"%"), paste(round(results_mod1[[2]]*100,2),"%"))
+kable(table_mod1) %>% 
+  kable_styling(bootstrap_options = c("hover"), 
+                full_width = F, position = "center", fixed_thead = T)
 ```
 
 Main predictors: 
@@ -230,8 +244,6 @@ Main predictors:
 2. Product type: Game console
 
 ## 2nd pre-process: feature selection {.flexbox .vcenter}
-
-
 
 ```{r}
 # Dummy variables 
@@ -262,13 +274,13 @@ rownames(ex_prod_dummy) <- rownames(ex_prod)
 # Correlation plot
 ex_prod_corr <- cor(ex_prod_dummy)
 corrplot(ex_prod_corr, method = "pie", 
-         type = "lower", order = "hclust", 
+         type = "lower", order = "FPC", 
          col = brewer.pal(n = 8, name = "RdBu"),
          number.cex = 0.9, number.digits = 2, 
          tl.cex = 1.2, tl.srt = 1, tl.col = "black")
 ```
 
-## 2nd modalisation: linear regression {.bigger}
+## 2nd modalization: linear regression {.bigger .flexbox .vcenter}
 
 ```{r 2nd model creation, warning=FALSE, message=FALSE}
 # creating trainin and testing with the features selected
@@ -282,9 +294,19 @@ test <- ex_prod_dummy[-train_id,]
 # model creation
 mod_2lm <- lm(formula = Vol ~., data = train)
 
-# metrics
-postResample(pred = predict(object = mod_2lm, newdata = test),
-             obs = test$Vol)
+# model performance
+train_res_mod2 <- postResample(pred = predict(object = mod_2lm, newdata = train),
+                             obs = train$Vol)
+results_mod2 <- postResample(pred = predict(object = mod_2lm, newdata = test),
+                             obs = test$Vol)
+
+# creating a grid with the different results
+table_mod2 <- tribble(~metric,   ~train           ,        ~test     , 
+                        "RMSE" , round(train_res_mod2[[1]],2), round(results_mod2[[1]],2),      
+                        "R^2"  , paste(round(train_res_mod2[[2]]*100,2),"%"), paste(round(results_mod2[[2]]*100,2),"%"))
+kable(table_mod2) %>% 
+  kable_styling(bootstrap_options = c("hover"), 
+                full_width = F, position = "center", fixed_thead = T)
 ```
 
 Main predictors: 
@@ -344,7 +366,7 @@ ex_prod_dummy %>%
     geom_point(color = "dodgerblue4") +
     geom_smooth(alpha=0.3, size=0, span=0.5, se = F) +
     geom_label(aes(x = 650, y = 900, 
-                   label = "There is a clear positive correlation\nbetween the total number of reviews\na product has with the number of sales"),
+                   label = "There is a clear positive correlation\nbetween the total number of stars\na product has with the number of sales"),
              hjust = 0, 
              vjust = 0.5, 
              lineheight = 0.8,
@@ -356,15 +378,43 @@ ex_prod_dummy %>%
     theme(axis.text.y = element_text(),
           axis.text.x = element_text(), 
           legend.title = element_blank()) +
-    labs(title = "Total sales vs total number of reviews by product", 
-         y = "Volume", x = "total number of reviews")
+    labs(title = "Total sales vs total number of stars by product", 
+         y = "Volume", x = "total number of stars")
 ```
 
-## 3rd modalisation: linear regression
+## 3rd pre-process: corr. matrix with total stars {.flexbox .vcenter}
+
+```{r}
+# Correlation plot
+ex_prod_corr <- cor(ex_prod_dummy %>% 
+                      select(-product_num, -x5, -x4, -x3, -x2, -x1, 
+                             -Profit_M, -Price))
+corrplot(ex_prod_corr, method = "pie", 
+         type = "lower", order = "FPC", 
+         col = brewer.pal(n = 8, name = "RdBu"),
+         number.cex = 0.9, number.digits = 2, 
+         tl.cex = 1.2, tl.srt = 1, tl.col = "black")
+```
+
+## 3rd pre-process: corr. matrix with x4 and x2 {.flexbox .vcenter}
+
+```{r}
+# Correlation plot
+ex_prod_corr <- cor(ex_prod_dummy %>% 
+                      select(-product_num, -x5, -x3, -x1, -total_stars, 
+                             -Profit_M, -Price))
+corrplot(ex_prod_corr, method = "pie", 
+         type = "lower", order = "FPC", 
+         col = brewer.pal(n = 8, name = "RdBu"),
+         number.cex = 0.9, number.digits = 2, 
+         tl.cex = 1.2, tl.srt = 1, tl.col = "black")
+```
+
+## 3rd modalization: linear regression {.flexbox .vcenter}
 
 ```{r 3rd model with linear regression}
 ex_prod_dummy %<>% 
-  select(-x5, -x4, -x3, -x2, -x1, -Profit_M, -Price) %>% 
+  select(-x5, -x3, -x1, -total_stars, -Profit_M, -Price) %>% 
   column_to_rownames(var = "product_num")
 
 # creating trainin and testing with the features selected
@@ -378,23 +428,22 @@ test <- ex_prod_dummy[-train_id,]
 # model creation
 mod_3lm <- lm(formula = Vol ~., data = train)
 
-# metrics
-postResample(pred = predict(object = mod_3lm, newdata = test),
-             obs = test$Vol)
+# model performance
+train_res_mod3 <- postResample(pred = predict(object = mod_3lm, newdata = train),
+                             obs = train$Vol)
+results_mod3 <- postResample(pred = predict(object = mod_3lm, newdata = test),
+                             obs = test$Vol)
+
+# creating a grid with the different results
+table_mod3 <- tribble(~metric,   ~train           ,        ~test     , 
+                        "RMSE" , round(train_res_mod3[[1]],2), round(results_mod3[[1]],2),      
+                        "R^2"  , paste(round(train_res_mod3[[2]]*100,2),"%"), paste(round(results_mod3[[2]]*100,2),"%"))
+kable(table_mod3) %>% 
+  kable_styling(bootstrap_options = c("hover"), 
+                full_width = F, position = "center", fixed_thead = T)
 ```
 
-| Variables used            | Main predictors         |
-| ------------------------- |-------------------------|
-| - Total number of stars   | - Total number of stars |
-| - Positive service        | - Positive service      |
-| - Negative serice         | - Negative service      |
-| - Recommended product     | - Recommended product   |
-| - PC                      |                         |
-| - Laptop                  |                         |
-| - Netbook                 |                         |
-| - Smart Phone             |                         |
-
-## 3rd error check: errors in all the ex. prod {.flexbox .vcenter}
+## 3rd error check: errors visualization linear regression {.flexbox .vcenter}
 
 ```{r error visualization 3rd model, warning=FALSE}
 # adding product number to datasets and creating one only with categories
@@ -433,8 +482,8 @@ ex_prod_dummy %>%
                fill = NA, 
                label.size = NA, 
                size = 3.5) +
-    geom_label(aes(x = 1230, y = 700,
-                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",round(metrics_rel_prod[[2]],3),"\n   - MAE: ",round(metrics_rel_prod[[3]],3),"\n\nThe errors of the points with the product\nnumber are higher than +/-",treshold," items.")),
+    geom_label(aes(x = -300, y = 2000,
+                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",round(metrics_rel_prod[[2]],3),"\n   - MAE: ",round(metrics_rel_prod[[3]],3))),
                label.size = NA,
                size = 4.5,
                colour = "red2",
@@ -485,14 +534,14 @@ ex_prod_dummy %>%
 
 ```{r identifying repeated rows, warning=F, message=F}
 kable(ex_prod_dummy %>% 
-  select(product_num, ProductType, total_stars, Pos_Ser, Neg_Ser, Recomend, Vol) %>% 
+  select(product_num, ProductType, Pos_Ser, Neg_Ser, Recomend, Vol) %>% 
   filter(ProductType %in% c("ExtendedWarranty")), format = "html") %>% 
   kable_styling(bootstrap_options = c("hover"), 
                 full_width = T, position = "center", fixed_thead = T) %>% 
   row_spec(3:10, bold = T, background = "#f0f5f0")
 
 ex_prod_dummy %<>% 
-  dplyr::distinct(ProductType, total_stars, Pos_Ser, Neg_Ser, Recomend, Vol, 
+  dplyr::distinct(ProductType, Pos_Ser, Neg_Ser, Recomend, Vol, 
                   .keep_all = TRUE)
 ```
 
@@ -530,10 +579,9 @@ ex_prod_dummy %>%
                hjust = 0,
                vjust = 0,
                lineheight = 0.8) +
-    geom_label(aes(label = if_else(service_type %in% "Pos_Ser" & 
+    geom_text(aes(label = if_else(service_type %in% "Pos_Ser" & 
                                      service_quantity > 40 &
-                                     Vol < 1000, ProductType, NULL)), 
-               label.size = NA,
+                                     Vol < 1000, ProductType, NULL)),
                size = 4,
                colour = "darkgreen",
                hjust = -0.5,
@@ -552,12 +600,12 @@ ex_prod_dummy %<>%
   dplyr::filter(!(product_num %in% c("167")))
 ```
 
-## 4th modalisation: linear regression
+## 4th modalization: linear regression
 
-```{r 4th modlaization, echo=T}
+```{r 4th modlaization}
 ex_prod_4mod <- ex_prod_dummy %>% 
-  dplyr::select(Pos_Ser, Neg_Ser, Recomend, PC, Laptop, 
-                Netb, Smart_Ph, total_stars, Vol)
+  dplyr::select(x2, x4, Pos_Ser, Neg_Ser, Recomend, PC, Laptop, 
+                Netb, Smart_Ph, Vol)
 
 # creating trainin and testing with the features selected
 set.seed(123)
@@ -570,20 +618,30 @@ test <- ex_prod_4mod[-train_id,]
 # model creation
 mod_4lm <- lm(formula = Vol ~., data = train)
 
-# metrics
-postResample(pred = predict(object = mod_4lm, newdata = test),
-             obs = test$Vol)
+# model performance
+train_res_mod4 <- postResample(pred = predict(object = mod_4lm, newdata = train),
+                             obs = train$Vol)
+results_mod4 <- postResample(pred = predict(object = mod_4lm, newdata = test),
+                             obs = test$Vol)
+
+# creating a grid with the different results
+table_mod4 <- tribble(~metric,   ~train           ,        ~test     , 
+                        "RMSE" , round(train_res_mod4[[1]],2), round(results_mod4[[1]],2),      
+                        "R^2"  , paste(round(train_res_mod4[[2]]*100,2),"%"), paste(round(results_mod4[[2]]*100,2),"%"))
+kable(table_mod4) %>% 
+  kable_styling(bootstrap_options = c("hover"), 
+                full_width = F, position = "center", fixed_thead = T)
 ```
 
 The model has decrease the performance. Let's see how is performing to the categories we are interested. 
 
-## 4th error check: error visualization {.flexbox .vcenter}
+## 4th error check: error visualization lm {.flexbox .vcenter}
 
 ```{r 4th error check, warning=F, message=F}
 # looking at the metrics of the relevant categories
 ex_prod_dummy %<>%
-  add_predictions(model = mod_3lm, var = "pred") %>% 
-  add_residuals(model = mod_3lm, var = "resid")
+  add_predictions(model = mod_4lm, var = "pred") %>% 
+  add_residuals(model = mod_4lm, var = "resid")
 
 ex_prod_dummy %>% 
   dplyr::filter(ProductType %in% rel_categories) -> ex_prod_filt
@@ -604,8 +662,8 @@ ex_prod_dummy %>%
                fill = NA, 
                label.size = NA, 
                size = 3.5) +
-    geom_label(aes(x = 1230, y = 700,
-                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",round(metrics_rel_prod[[2]],3),"\n   - MAE: ",round(metrics_rel_prod[[3]],3),"\n\nMy model has NOT improved.")),
+    geom_label(aes(x = -300, y = 2000,
+                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",round(metrics_rel_prod[[2]],3),"\n   - MAE: ",round(metrics_rel_prod[[3]],3))),
                label.size = NA,
                size = 4.5,
                colour = "red2",
@@ -622,20 +680,15 @@ ex_prod_dummy %>%
           legend.title = element_blank(), 
           legend.position = "none") -> error_plot_mod4
 error_plot_mod4
+
+# removing predictions
+ex_prod_dummy$pred <- NULL
+ex_prod_dummy$resid <- NULL
 ```
 
-## 5th modalization: k-Nearest neighbours
+## 5th modalization: using knn with caret
 
-```{r preparing data fpr modalization with knn}
-# scaling variables
-ex_prod_dummy$Pos_Ser_sc <- rescale(ex_prod_dummy$Pos_Ser)
-ex_prod_dummy$Neg_Ser_sc <- rescale(ex_prod_dummy$Neg_Ser)
-ex_prod_dummy$Recomend_sc <- rescale(ex_prod_dummy$Recomend)
-ex_prod_dummy$total_stars_sc <- rescale(ex_prod_dummy$total_stars)
-
-#vector con nombres de las variables escaladas
-sc_var <- c("Pos_Ser_sc","Neg_Ser_sc","Recomend_sc","total_stars_sc")
-
+```{r preparing the train and test 5th modalization}
 # creating training and testing 
 set.seed(123)
 train_id <- createDataPartition(y = ex_prod_dummy$Vol,
@@ -645,50 +698,321 @@ train <- ex_prod_dummy[train_id,]
 test <- ex_prod_dummy[-train_id,]
 ```
 
-```{r first modalization with knn, echo=TRUE}
-# modalization with knn
-mod_5knn <- knn.reg(train[,sc_var], # predictores que usaremos para predecir 
-                    test[,sc_var], # validadores, los predictores que queremos usar para validar
-                    train$Vol, # salida que tiene que dar en el conjunto de entrenamiento
-                    k = 1, # número de vecinos
-                    algorithm = "brute") # algoritmos que se pueden usar
+```{r knn with caret, echo=TRUE, warning=FALSE, message=FALSE}
+# defining variables to create the model 
+rel_var <- c("x4","x2","Pos_Ser","Neg_Ser","Recomend","Vol","PC","Laptop",
+             "Netb","Smart_Ph")
 
-# checking the metrics 
-postResample(pred = mod_5knn$pred, obs = test$Vol)
+# cross validation
+ctrl <- caret::trainControl(method = "repeatedcv",
+                            number = 10,
+                            repeats = 3)
+
+# modalization 
+mod_5knn_caret <- caret::train(Vol ~.,
+                               method = "knn",
+                               data = train[,rel_var],
+                               trControl = ctrl, 
+                               preProcess = c("center","scale"))
 ```
 
-## 5th modalisation: KNN choosing the best k {.flexbox .vcenter}
+```{r table of errors 5th model}
+# model performance
+train_res_mod5 <- postResample(pred = predict(object = mod_5knn_caret, 
+                                              newdata = train),
+                             obs = train$Vol)
+results_mod5 <- postResample(pred = predict(object = mod_5knn_caret, 
+                                            newdata = test),
+                             obs = test$Vol)
 
-```{r selecting the best k for knn}
-rdacb.knn.reg <- function(tr_predictors, val_predictors, 
-                          tr_target, val_target, k){
-  library(FNN)
-  res <- knn.reg(tr_predictors, val_predictors,
-                 tr_target, k, algorithm = "brute")
-  rmserror <- sqrt(mean((val_target - res$pred)^2))
-  # cat(paste("RMSE para k = ", toString(k), ": ", rmserror, "\n", sep = ""))
-  rmserror
-}
+# creating a grid with the different results
+table_mod5 <- tribble(~metric,   ~train           ,        ~test     , 
+                        "RMSE" , round(train_res_mod5[[1]],2), round(results_mod5[[1]],2),      
+                        "R^2"  , paste(round(train_res_mod5[[2]]*100,2),"%"), paste(round(results_mod5[[2]]*100,2),"%"))
+kable(table_mod5) %>% 
+  kable_styling(bootstrap_options = c("hover"), 
+                full_width = F, position = "center", fixed_thead = T)
+```
 
-radcb.knn.reg.multi <- function(tr_predictors, val_predictors,
-                                tr_target, val_target, start_k, end_k){
-  rms_errors <- vector()
-  for(k in start_k:end_k){
-    rms_error <- rdacb.knn.reg(tr_predictors, val_predictors, 
-                               tr_target, val_target, k)
-    rms_errors <- c(rms_errors, rms_error)
-  }
-  plot(rms_errors, type = "o", xlab = "k", ylab = "RMSE")
-}
+## 5th error check: error visualization knn {.flexbox .vcenter}
 
-radcb.knn.reg.multi(train[,sc_var], test[,sc_var], train$Vol, test$Vol, 1, 15)
+```{r warning=FALSE, message=FALSE}
+# looking at the metrics of the relevant categories
+ex_prod_dummy %<>%
+  add_predictions(model = mod_5knn_caret, var = "pred") %>% 
+  add_residuals(model = mod_5knn_caret, var = "resid")
 
-# selecting 11 k to be more generalised 
-mod_5knn <- knn.reg(train[,sc_var], # predictores que usaremos para predecir 
-                    test[,sc_var], # validadores, los predictores que queremos usar para validar
-                    train$Vol, # salida que tiene que dar en el conjunto de entrenamiento
-                    k = 11, # número de vecinos
-                    algorithm = "brute") # algoritmos que se pueden usar
-postResample(pred = mod_5knn$pred, obs = test$Vol)
+ex_prod_dummy %>% 
+  dplyr::filter(ProductType %in% rel_categories) -> ex_prod_filt
+
+metrics_rel_prod <- postResample(pred = ex_prod_filt$pred, obs = ex_prod_filt$Vol)
+
+# error plot
+ex_prod_dummy %>% 
+  ggplot(aes(x = pred, y = Vol)) +
+    geom_point(aes(color = (ProductType %in% rel_categories))) + 
+    geom_abline(intercept = 0, slope = 1, color = "darkgray") +
+    geom_label(aes(label = if_else(abs(resid)>treshold & 
+                              ProductType %in% rel_categories, 
+                              paste(ProductType, product_num), NULL)),
+               hjust = 0, 
+               vjust = 0.4, 
+               colour = "red2", 
+               fill = NA, 
+               label.size = NA, 
+               size = 3.5) +
+    geom_label(aes(x = 10, y = 2000,
+                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",round(metrics_rel_prod[[2]],3),"\n   - MAE: ",round(metrics_rel_prod[[3]],3))),
+               label.size = NA,
+               size = 4.5,
+               colour = "red2",
+               hjust = 0,
+               vjust = 0.5,
+               lineheight = 0.8) +
+    labs(title = "Error visualizations 5th model (knn with caret)",
+         x = "Predicted volume",
+         y = "Volume") +
+    scale_color_manual(values = c("grey","red")) +
+    theme_classic() +
+    theme(axis.text.y = element_text(),
+          axis.text.x = element_text(), 
+          legend.title = element_blank(), 
+          legend.position = "none") -> error_plot_mod4
+error_plot_mod4
+
+# removing predictions
+ex_prod_dummy$pred <- NULL
+ex_prod_dummy$resid <- NULL
+```
+
+## 6th modalization: using Random Forest  {.flexbox .vcenter}
+
+```{r defining relevant variables, echo=TRUE}
+set.seed(123)
+mod_6rf <- caret::train(Vol ~ .,
+                       method = "rf",
+                       data = train[,rel_var],
+                       trControl = ctrl)
+```
+
+```{r table of errors 6th model}
+# model performance
+train_res_mod6 <- postResample(pred = predict(object = mod_6rf, 
+                                              newdata = train),
+                             obs = train$Vol)
+results_mod6 <- postResample(pred = predict(object = mod_6rf, 
+                                            newdata = test),
+                             obs = test$Vol)
+
+# creating a grid with the different results
+table_mod6 <- tribble(~metric,   ~train           ,        ~test     , 
+                        "RMSE" , round(train_res_mod6[[1]],2), round(results_mod6[[1]],2),      
+                        "R^2"  , paste(round(train_res_mod6[[2]]*100,2),"%"), paste(round(results_mod6[[2]]*100,2),"%"))
+kable(table_mod6) %>% 
+  kable_styling(bootstrap_options = c("hover"), 
+                full_width = F, position = "center", fixed_thead = T)
+```
+
+## 6th error check: error visualization rf {.flexbox .vcenter}
+
+```{r warning=FALSE, message=FALSE}
+# looking at the metrics of the relevant categories
+ex_prod_dummy %<>%
+  add_predictions(model = mod_6rf, var = "pred") %>% 
+  add_residuals(model = mod_6rf, var = "resid")
+
+ex_prod_dummy %>% 
+  dplyr::filter(ProductType %in% rel_categories) -> ex_prod_filt
+
+metrics_rel_prod <- postResample(pred = ex_prod_filt$pred, obs = ex_prod_filt$Vol)
+
+# error plot
+ex_prod_dummy %>% 
+  ggplot(aes(x = pred, y = Vol)) +
+    geom_point(aes(color = (ProductType %in% rel_categories))) + 
+    geom_abline(intercept = 0, slope = 1, color = "darkgray") +
+    geom_label(aes(label = if_else(abs(resid)>treshold & 
+                              ProductType %in% rel_categories, 
+                              paste(ProductType, product_num), NULL)),
+               hjust = 0, 
+               vjust = 0.4, 
+               colour = "red2", 
+               fill = NA, 
+               label.size = NA, 
+               size = 3.5) +
+    geom_label(aes(x = 10, y = 2000,
+                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",round(metrics_rel_prod[[2]],3),"\n   - MAE: ",round(metrics_rel_prod[[3]],3))),
+               label.size = NA,
+               size = 4.5,
+               colour = "red2",
+               hjust = 0,
+               vjust = 0.5,
+               lineheight = 0.8) +
+    labs(title = "Error visualizations 6th model rf",
+         x = "Predicted volume",
+         y = "Volume") +
+    scale_color_manual(values = c("grey","red")) +
+    theme_classic() +
+    theme(axis.text.y = element_text(),
+          axis.text.x = element_text(), 
+          legend.title = element_blank(), 
+          legend.position = "none") -> error_plot_mod4
+error_plot_mod4
+
+# removing predictions
+ex_prod_dummy$pred <- NULL
+ex_prod_dummy$resid <- NULL
+```
+
+## 7th modalization: using Support Vector Machine  {.flexbox .vcenter}
+
+```{r modalization with SVM, echo=TRUE, warning=FALSE, message=FALSE}
+set.seed(123)
+mod_7svm <- caret::train(Vol ~ .,
+                       method = "svmLinear",
+                       data = train[,rel_var],
+                       trControl = ctrl)
+```
+
+```{r creating results table for 7th model}
+# model performance
+train_res_mod7 <- postResample(pred = predict(object = mod_7svm, 
+                                              newdata = train),
+                             obs = train$Vol)
+results_mod7 <- postResample(pred = predict(object = mod_7svm, 
+                                            newdata = test),
+                             obs = test$Vol)
+
+# creating a grid with the different results
+table_mod7 <- tribble(~metric,   ~train           ,        ~test     , 
+                        "RMSE" , round(train_res_mod7[[1]],2), round(results_mod7[[1]],2),      
+                        "R^2"  , paste(round(train_res_mod7[[2]]*100,2),"%"), paste(round(results_mod7[[2]]*100,2),"%"))
+kable(table_mod7) %>% 
+  kable_styling(bootstrap_options = c("hover"), 
+                full_width = F, position = "center", fixed_thead = T)
+```
+
+## 7th error check: error visualization SVM  {.flexbox .vcenter}
+
+```{r warning=FALSE, message=FALSE}
+# looking at the metrics of the relevant categories
+ex_prod_dummy %<>%
+  add_predictions(model = mod_7svm, var = "pred") %>% 
+  add_residuals(model = mod_7svm, var = "resid")
+
+ex_prod_dummy %>% 
+  dplyr::filter(ProductType %in% rel_categories) -> ex_prod_filt
+
+metrics_rel_prod <- postResample(pred = ex_prod_filt$pred, obs = ex_prod_filt$Vol)
+
+# error plot
+ex_prod_dummy %>% 
+  ggplot(aes(x = pred, y = Vol)) +
+    geom_point(aes(color = (ProductType %in% rel_categories))) + 
+    geom_abline(intercept = 0, slope = 1, color = "darkgray") +
+    geom_label(aes(label = if_else(abs(resid)>treshold & 
+                              ProductType %in% rel_categories, 
+                              paste(ProductType, product_num), NULL)),
+               hjust = 0, 
+               vjust = 0.4, 
+               colour = "red2", 
+               fill = NA, 
+               label.size = NA, 
+               size = 3.5) +
+    geom_label(aes(x = 10, y = 2000,
+                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",round(metrics_rel_prod[[2]],3),"\n   - MAE: ",round(metrics_rel_prod[[3]],3))),
+               label.size = NA,
+               size = 4.5,
+               colour = "red2",
+               hjust = 0,
+               vjust = 0.5,
+               lineheight = 0.8) +
+    labs(title = "Error visualizations 6th model rf",
+         x = "Predicted volume",
+         y = "Volume") +
+    scale_color_manual(values = c("grey","red")) +
+    theme_classic() +
+    theme(axis.text.y = element_text(),
+          axis.text.x = element_text(), 
+          legend.title = element_blank(), 
+          legend.position = "none") -> error_plot_mod4
+error_plot_mod4
+
+# removing predictions
+ex_prod_dummy$pred <- NULL
+ex_prod_dummy$resid <- NULL
+```
+
+## Model application and results  {.flexbox .vcenter}
+
+```{r preparing the new products dataset}
+new_prod$ProductType <- factor(new_prod$ProductType)
+new_prod %<>% 
+  fastDummies::dummy_columns(remove_first_dummy = FALSE) %>% 
+  select(ProductType_PC,ProductType_Laptop,ProductType_Netbook,
+         ProductType_Smartphone,x4StarReviews,x2StarReviews,
+         PositiveServiceReview,NegativeServiceReview,Recommendproduct,
+         Volume,ProductType,ProductNum,ProfitMargin) %>% 
+  rename(PC = ProductType_PC, 
+         Laptop = ProductType_Laptop,
+         Netb = ProductType_Netbook,
+         Smart_Ph = ProductType_Smartphone, 
+         x4 = x4StarReviews,
+         x2 = x2StarReviews, 
+         Pos_Ser = PositiveServiceReview, 
+         Neg_Ser = NegativeServiceReview,
+         Recomend = Recommendproduct,
+         Vol = Volume,
+         product_num = ProductNum) %>% 
+  mutate(data_type = "new_products")
+new_prod$product_num <- as.character(new_prod$product_num)
+```
+
+
+```{r}
+best_new <- new_prod %>% 
+  add_predictions(model = mod_6rf, var = "Vol") %>% 
+  select(ProductType, product_num, Vol, ProfitMargin) %>% 
+  filter(ProductType %in% rel_categories) %>% 
+  mutate(Total_Profits = ProfitMargin*Vol, 
+         Total_Profits_Dol = paste(round((Total_Profits), 0),"$"),
+         type_num = paste(ProductType, product_num)) %>% 
+  arrange(Total_Profits)
+
+best_new_position <- unique(best_new$type_num)
+
+best_new %>% 
+  ggplot() +
+    geom_col(aes(x = paste(ProductType, product_num), y = -Total_Profits), fill = "gold") +
+    geom_col(aes(x = paste(ProductType, product_num), y = Vol), fill = "dodgerblue3") +
+    coord_flip() +
+    scale_y_continuous(limits = c(-150,700), labels = NULL) +
+    geom_label(aes(x = paste(ProductType, product_num),
+                   y = -Total_Profits, 
+                   label = Total_Profits_Dol),
+               hjust = 1, 
+               vjust = 0.4, 
+               colour = "goldenrod3", 
+               fill = NA, 
+               label.size = NA, 
+               size = 3.5) +
+    geom_label(aes(x = paste(ProductType, product_num),
+                   y = Vol, 
+                   label = round(Vol, 0)),
+               hjust = 0, 
+               vjust = 0.4, 
+               colour = "dodgerblue4", 
+               fill = NA, 
+               label.size = NA, 
+               size = 3.5) +
+    scale_x_discrete(limits = best_new_position) +
+    labs(title = "Pred. Profits ($) vs Pred. Volume (items) for Random Forest model") +
+    theme(legend.position = "bottom", 
+          legend.title = element_blank(), 
+          plot.title = element_text(hjust = 0.5), 
+          plot.subtitle = element_text(hjust = 0.5)) + theme_void() -> p1
+p1 + theme(axis.title.x = element_blank(), 
+           axis.title.y = element_blank(), 
+           axis.text.y = element_text())
 ```
 

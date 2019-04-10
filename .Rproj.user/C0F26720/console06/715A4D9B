@@ -1,28 +1,6 @@
-[0m[0KMicrosoft Windows [Versión 10.0.17134.648][0K[?25l
+[0mMicrosoft Windows [Versión 10.0.17134.706][0K[?25l
 (c) 2018 Microsoft Corporation. Todos los derechos reservados.[0K
 [0K
-C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git s[0K[?25ht[0Ka[0Kt[0Ku[0Ks[0K]0;  - git  status[?25l
-[0K[?25h]0; On branch master[0K[?25l
-Changes not staged for commit:[0K
-  (use "git add/rm <file>..." to update what will be committed)[0K
-  (use "git checkout -- <file>..." to discard changes in working directory)[0K
-[0K
-        [0;31mmodified:   .Rhistory[0m[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/console06/715A4D9B[0m[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/console06/INDEX001[0m[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/sources/prop/63FDDC8C[0m[0K
-        [0;31mmodified:   .Rproj.user/C0F26720/sources/prop/D59AEFCC[0m[0K
-        [0;31mmodified:   .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/chunks.json[0m[0K
-        [0;31mmodified:   scripts/presentation_multipleRegression.Rmd[0m[0K
-        [0;31mmodified:   scripts/presentation_multipleRegression.html[0m[0K
-        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/boxplot to understand the distribution [0Ko
-f the volume-1.png[0m[0K
-        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/business overview-1.png[0m[0K
-        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/error visualization 3rd model-1.png[0m[0K
-        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/looking for NAs-1.png[0m[0K
-        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-1-1.png[0m[0K
-        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/volumen total stars relation-1.png[0m[0K
-[0K
-no changes added to commit (use "git add" and/or "git commit -a")[0K
-[0K
-C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git a[0K[?25hd[0Kd[0K[100G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git add .[0K[?25h
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingPro[0Kf
+itabilty>[0K[?25hg[0Ki[0Kt[0K[14G[?25litabilty>git a[0K[?25hd[0Kd[0K[18G[?25litabilty>git add .[0K[?25h]0;  - git  add .[?25l
+[0K[?25h
