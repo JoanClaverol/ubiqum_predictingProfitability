@@ -3,4 +3,134 @@
 [0K
 C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingPro[0Kf
 itabilty>[0K[?25hg[0Ki[0Kt[0K[14G[?25litabilty>git a[0K[?25hd[0Kd[0K[18G[?25litabilty>git add .[0K[?25h]0;  - git  add .[?25l
+[0K[?25hwarning: LF will be replaced by CRLF in .Rhistory.[0K[?25l
+The file will have its original line endings in your working directory.[0K
+[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/C0F26720/sources/prop/D59AEFC[0KC[?25l
+.[0K
+The file will have its original line endings in your working directory.[0K
+warning: LF will be replaced by CRLF in .Rproj.user/C0F26720/sources/prop/INDEX.[0K
+The file will have its original line endings in your working directory.[0K
+warning: LF will be replaced by CRLF in .Rproj.user/shared/notebooks/paths.[0K
+The file will have its original line endings in your working directory.[0K
+[0K[?25h]0; [?25l
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingPro[0Kf
+itabilty>[0K[?25hg[0Ki[0Kt[0K[14G[?25litabilty>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[21G[?25litabilty>git commit -[0K[?25hm[0K[24G[?25litabilty>git commit -m "[0K[?25hr[0Ke[0Kp[0Ko[0Kr[0Kt[0K[32G[?25litabilty>git commit -m "report e[0K[?25hn[0Kd[0Ke[0Kd[0K"[0K]0;  - git  commit -m "report ended"[?25l
+[0K[?25h[master 633e2ca] report ended[0K[?25l
+ 26 files changed, 1621 insertions(+), 807 deletions(-)[0K
+ rewrite .Rhistory (62%)[0K
+ rewrite .Rproj.user/C0F26720/console06/715A4D9B (94%)[0K
+ rewrite .Rproj.user/C0F26720/console06/INDEX001 (84%)[0K
+ rewrite .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/[0Ks
+/chunks.json (77%)[0K
+ create mode 100644 scripts/JB_style.css[0K
+ create mode 100644 scripts/Untitled_1.css[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/4th[0K
+error check-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/box[0Kp
+lot to understand the distribution of the volume-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/bus[0Ki
+ness overview-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/err[0Ko
+r visualization 3rd model-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/loo[0Kk
+ing for NAs-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/neg[0Ka
+tive and positive service vs volume-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/rec[0Ko
+mmendation variable exploration-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/unn[0Ka
+med-chunk-1-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/unn[0Ka
+med-chunk-2-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/unn[0Ka
+med-chunk-3-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/unn[0Ka
+med-chunk-4-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/unn[0Ka
+med-chunk-5-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/unn[0Ka
+med-chunk-6-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/unn[0Ka
+med-chunk-7-1.png[0K
+ create mode 100644 scripts/presentation_multipleRegression_files/figure-html/vol[0Ku
+men total stars relation-1.png[0K
+[0K[?25h]0; [?25l
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingPro[0Kf
+itabilty>[0K[?25hg[0Ki[0Kt[0K[14G[?25litabilty>git p[0K[?25hu[0Ks[0Kh[0K[19G[?25litabilty>git push o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[26G[?25litabilty>git push origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K]0;  - git  push origin master[?25l
+[0K[?25hEnumerating objects: 62, done.[0K[?25l
+Counting objects:  82% (51/62)[0K[1G[?25hCounting objects: 100% (62/62), done.[0K[?25l
+Delta compression using up to 4 threads.[0K
+Compressing objects:  32% (12/37)[0K[1G[?25h[?25lCompressing objects:  56% (21/37)[0K[1G[?25h[?25lCompressing objects:  78% (29/37)[0K[1G[?25hCompressing objects: 100% (37/37), done.[0K[?25l
+Writing objects:   7% (3/41)[0K[1G[?25h[?25lWriting objects:  56% (23/41)[0K[1G[?25h[?25lWriting objects:  82% (34/41)[0K[1G[?25hWriting objects: 100% (41/41), 746.97 KiB | 3.68 MiB/s, done.[0K[?25l
+Total 41 (delta 10), reused 0 (delta 0)[0K
+[0K[?25h[?25lremote: Resolving deltas:  90% (9/10)[0K[1G[?25hremote: Resolving deltas: 100% (10/10), completed with 10 local objects.[0K[?25l
+[0K[?25hTo https://github.com/JoanClaverol/ubiqum_predictingProfitability.git[0K[?25l
+   18cccc0..633e2ca  master -> master[0K
+[0K[?25h]0; [?25l
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingPro[0Kf
+itabilty>[0K[?25h[?25l[13AC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git push origin master[0K
+Enumerating objects: 62, done.[0K
+Counting objects: 100% (62/62), done.[0K
+Delta compression using up to 4 threads.[0K
+Compressing objects: 100% (37/37), done.[0K
+Writing objects: 100% (41/41), 746.97 KiB | 3.68 MiB/s, done.[0K
+Total 41 (delta 10), reused 0 (delta 0)[0K
+remote: Resolving deltas: 100% (10/10), completed with 10 local objects.[0K
+To https://github.com/JoanClaverol/ubiqum_predictingProfitability.git[0K
+   18cccc0..633e2ca  master -> master[0K
+[0K
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K
+[0K
+[0K[2A[92G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>g[0K
+[0K
+[0K[2A[93G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>gi[0K
+[0K
+[0K[2A[94G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git[0K
+[0K
+[0K[2A[95G[?25h[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git s[0K
+[0K
+[0K[2A[97G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git st[0K
+[0K
+[0K[2A[98G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git sta[0K
+[0K
+[0K[2A[99G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git stat[0K
+[0K
+[0K[2A[100G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git statu[0K
+[0K
+[0K[2A[101G[?25h[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git status[0K
+[0K
+[0K[2A[102G[?25h]0;  - git  status[?25l
+[?25hOn branch master[0K[?25l
+Changes not staged for commit:[0K
+  (use "git add/rm <file>..." to update what will be committed)[0K
+  (use "git checkout -- <file>..." to discard changes in working directory)[0K
+[0K
+        [0;31mmodified:   .Rproj.user/C0F26720/console06/715A4D9B[0m[0K
+        [0;31mmodified:   .Rproj.user/C0F26720/console06/INDEX001[0m[0K
+        [0;31mmodified:   .Rproj.user/C0F26720/sources/prop/D59AEFCC[0m[0K
+        [0;31mmodified:   .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/chunks.json[0m[0K
+        [0;31mmodified:   scripts/presentation_multipleRegression.Rmd[0m[0K
+        [0;31mmodified:   scripts/presentation_multipleRegression.html[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/4th error check-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/boxplot to understand the distribution [0Ko
+f the volume-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/business overview-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/error visualization 3rd model-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/looking for NAs-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/negative and positive service vs volume[0K-
+1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/recommendation variable exploration-1.p[0Kn
+g[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-1-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-2-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-3-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-4-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-5-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-6-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-7-1.png[0m[0K
+        [0;31mdeleted:    scripts/presentation_multipleRegression_files/figure-html/volumen total stars relation-1.png[0m[0K
+[0K
+no changes added to commit (use "git add" and/or "git commit -a")[0K
+[0K[?25h]0; [?25l
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git a[0K[?25hd[0Kd[0K[100G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git add .[0K[?25h]0;  - git  add .[?25l
 [0K[?25h

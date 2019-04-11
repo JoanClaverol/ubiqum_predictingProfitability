@@ -68,7 +68,7 @@ ex_prod <- tibble::column_to_rownames(.data = ex_prod,
 ex_prod$ProductNum <- NULL
 ```
 
-## Data cleaning: missing values with VIM {.flexbox .vcenter}
+## Data cleaning: detecting NA with VIM of Best Seller Rank {.flexbox .vcenter}
 
 ```{r looking for NAs, message=F, warning=F}
 aggr(ex_prod, col=c('lightblue','red'), numbers=TRUE, sortVars=TRUE, 
@@ -128,7 +128,8 @@ Profit_category %>%
                fill = NA, 
                label.size = NA, 
                size = 3.5) +
-    labs(title = "Total Profits ($) vs Total Volume (items)") +
+    labs(title = "Blackwell overview",
+         subtitle = "Total Profits ($) vs Total Volume (items)") +
     theme(legend.position = "bottom", 
           legend.title = element_blank(), 
           plot.title = element_text(hjust = 0.5), 
@@ -317,7 +318,7 @@ Main predictors:
 
 The model is overfitted again. 
 
-## 3rd pre-process: outlier detection in stars {.flexbox .vcenter}
+## 3rd pre-process: outliers detection of stars variables {.flexbox .vcenter}
 
 ```{r plot the stars volume relation, warning=F, message=F}
 ex_prod_dummy %>%
@@ -443,6 +444,8 @@ kable(table_mod3) %>%
                 full_width = F, position = "center", fixed_thead = T)
 ```
 
+My model is not overfitted, but has a very low performance. Let's check where it is failing!
+
 ## 3rd error check: errors visualization linear regression {.flexbox .vcenter}
 
 ```{r error visualization 3rd model, warning=FALSE}
@@ -475,7 +478,7 @@ ex_prod_dummy %>%
     geom_abline(intercept = 0, slope = 1, color = "darkgray") +
     geom_label(aes(label = if_else(abs(resid)>treshold & 
                               ProductType %in% rel_categories, 
-                              product_num, NULL)),
+                              paste(ProductType, product_num), NULL)),
                hjust = 0, 
                vjust = 0.4, 
                colour = "red2", 
@@ -518,7 +521,7 @@ ex_prod_dummy %>%
                label.size = NA, 
                size = 3.5) +
     geom_label(aes(x = "0.1", y = 2000, 
-                   label = "There is an increase of the range related to the increment\nof the % recommendation, but the dispersion is too big."), 
+                   label = "There is an increase of the range related to the increment\nof the % recommendation. Problem: Big dispersion for higer rates.\n100% recommendation has 0 volume."), 
                label.size = NA, 
                size = 3.5, 
                colour = "#555555", 
@@ -572,7 +575,7 @@ ex_prod_dummy %>%
                size = 0.5, 
                curvature = -0.2, 
                arrow = arrow(length = unit(0.03, "npc"))) +
-    geom_label(aes(x = 100, y = 1400, label = "When the number of services starts\nto surpass 40, then the sales start to\ndecrease."),
+    geom_label(aes(x = 100, y = 1400, label = "When the number of services start\nto surpass 40 negative services, then\nthe sales start to decrease."),
                label.size = NA,
                size = 4,
                colour = "darkred",
@@ -633,7 +636,7 @@ kable(table_mod4) %>%
                 full_width = F, position = "center", fixed_thead = T)
 ```
 
-The model has decrease the performance. Let's see how is performing to the categories we are interested. 
+The model has improved a little bit. Let's see how is performing to the categories we are interested. 
 
 ## 4th error check: error visualization lm {.flexbox .vcenter}
 
@@ -655,7 +658,7 @@ ex_prod_dummy %>%
     geom_abline(intercept = 0, slope = 1, color = "darkgray") +
     geom_label(aes(label = if_else(abs(resid)>treshold & 
                               ProductType %in% rel_categories, 
-                              product_num, NULL)),
+                              paste(ProductType, product_num), NULL)),
                hjust = 0, 
                vjust = 0.4, 
                colour = "red2", 
@@ -769,7 +772,7 @@ ex_prod_dummy %>%
                hjust = 0,
                vjust = 0.5,
                lineheight = 0.8) +
-    labs(title = "Error visualizations 5th model (knn with caret)",
+    labs(title = paste("Error visualizations 5th model with knn, k =",mod_5knn_caret$bestTune[[1]]),
          x = "Predicted volume",
          y = "Volume") +
     scale_color_manual(values = c("grey","red")) +
@@ -1006,7 +1009,8 @@ best_new %>%
                label.size = NA, 
                size = 3.5) +
     scale_x_discrete(limits = best_new_position) +
-    labs(title = "Pred. Profits ($) vs Pred. Volume (items) for Random Forest model") +
+    labs(title = "Predicitng sales of new products",
+         subtitle = "Pred. Profits ($) vs Pred. Volume (items) for Random Forest model") +
     theme(legend.position = "bottom", 
           legend.title = element_blank(), 
           plot.title = element_text(hjust = 0.5), 
