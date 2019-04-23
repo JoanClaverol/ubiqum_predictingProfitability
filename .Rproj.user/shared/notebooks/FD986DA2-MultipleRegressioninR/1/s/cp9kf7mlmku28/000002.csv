@@ -1,5 +1,0 @@
-"0","Pred.Dummy <- dummyVars(~ .,"
-"0","                        data = ExProd.clean,"
-"0","                        sep = ""."")"
-"0","ExProd.dummy <- data.frame(predict(Pred.Dummy, newdata = ExProd))"
-"0","kable(head(ExProd.dummy)) %>% kable_styling(bootstrap_options = ""responsive"") %>% scroll_box(width = ""100%"", height = ""200px"")"

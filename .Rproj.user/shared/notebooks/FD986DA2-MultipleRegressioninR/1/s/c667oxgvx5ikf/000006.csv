@@ -1,2 +1,0 @@
-"0","ExProd %>% ggplot(aes(ProductType, x1StarReviews)) + geom_boxplot(outlier.colour = ""red"") + ggtitle(""Analysing 1 star review distribution"") + theme_bw() +"
-"0","  theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title.x = element_blank())"

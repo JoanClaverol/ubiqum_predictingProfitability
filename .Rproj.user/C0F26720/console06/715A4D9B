@@ -133,4 +133,43 @@ g[0m[0K
 no changes added to commit (use "git add" and/or "git commit -a")[0K
 [0K[?25h]0; [?25l
 C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git a[0K[?25hd[0Kd[0K[100G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git add .[0K[?25h]0;  - git  add .[?25l
-[0K[?25h
+[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/C0F26720/sources/prop/D59AEFCC.[0K[?25l
+The file will have its original line endings in your working directory.[0K
+[0K[?25h]0; [?25l
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[103G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git commit -[0K[?25hm[0K[106G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git commit -m "[0K[?25hp[0Kr[0Ke[0Ks[0Ke[0Kn[0Kt[0Ka[0Kt[0Ki[0Ko[0K[0Kn[?25l
+[0K[?25h e[0Kn[0Kd[0Ke[0Kd[0K"[0K]0;  - git  commit -m "presentation ended"[?25l
+[0K[?25h[master d611740] presentation ended[0K[?25l
+ 21 files changed, 162 insertions(+), 26 deletions(-)[0K
+ rewrite .Rproj.user/C0F26720/console06/INDEX001 (68%)[0K
+ rewrite .Rproj.user/shared/notebooks/E4150051-presentation_multipleRegression/1/s/chunks.json (74%)[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/4th error check-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/boxplot to understand the distribution [0Ko
+f the volume-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/business overview-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/error visualization 3rd model-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/looking for NAs-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/negative and positive service vs volume[0K-
+1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/recommendation variable exploration-1.p[0Kn
+g[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-1-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-2-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-3-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-4-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-5-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-6-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/unnamed-chunk-7-1.png[0K
+ delete mode 100644 scripts/presentation_multipleRegression_files/figure-html/volumen total stars relation-1.png[0K
+[0K[?25h]0; [?25l
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25hg[0Ki[0Kt[0K[96G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git p[0K[?25hu[0Ks[0Kh[0K[101G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git push o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[108G[?25lC:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>git push origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K]0;  - git  push origin master[?25l
+[0K[?25hEnumerating objects: 37, done.[0K[?25l
+Counting objects: 100% (37/37), done.[0K
+Delta compression using up to 4 threads.[0K
+Compressing objects:  12% (2/16)[0K[1G[?25h[?25lCompressing objects:  43% (7/16)[0K[1G[?25hCompressing objects: 100% (16/16), done.[0K[?25l
+Writing objects:  47% (9/19)[0K[1G[?25h[?25lWriting objects:  94% (18/19)[0K[1G[?25hWriting objects: 100% (19/19), 209.80 KiB | 994.00 KiB/s, done.[0K[?25l
+Total 19 (delta 9), reused 0 (delta 0)[0K
+[0K[?25h[?25lremote: Resolving deltas:  11% (1/9)[0K[1G[?25h[?25lremote: Resolving deltas:  77% (7/9)[0K[1G[?25h[?25lremote: Resolving deltas:  88% (8/9)[0K[1G[?25hremote: Resolving deltas: 100% (9/9), completed with 9 local objects.[0K[?25l
+[0K[?25hTo https://github.com/JoanClaverol/ubiqum_predictingProfitability.git[0K[?25l
+   633e2ca..d611740  master -> master[0K
+[0K[?25h]0; [?25l
+C:\Users\romcl\OneDrive\Documents\UbiqumCodeAcademy\projects\ubiqum_predictingProfitabilty>[0K[?25h

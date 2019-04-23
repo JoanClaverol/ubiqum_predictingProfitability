@@ -19,9 +19,9 @@ if(require("pacman")=="FALSE"){
   install.packages("pacman")
 } 
 
-pacman::p_load(corrplot, tidyverse, caret, dunn.test, Hmisc,xtable, htmlTable, 
+pacman::p_load(corrplot, dplyr, ggplot2, caret, tidyr, dunn.test, Hmisc,xtable, htmlTable, 
                knitr, kableExtra, RColorBrewer, e1071, FNN, scales,
-               tibble, modelr, magrittr, VIM, fastDummies, plotly)
+               tibble, modelr, magrittr, VIM, fastDummies, plotly, readr)
 
 ex_prod <- read_csv("../data/existingproductattributes2017.2.csv")
 new_prod <- read_csv("../data/newproductattributes2017.2.csv")
@@ -49,6 +49,13 @@ New product attributes and existing product attributes.
 4. Modalization: linear regresion, KNN, SVM and Random forest
 
 5. Error analysis
+
+## Exploring the data 
+
+```{r summary of the data}
+glimpse(ex_prod)
+```
+
 
 ## Data cleaning
 
@@ -318,7 +325,7 @@ Main predictors:
 
 The model is overfitted again. 
 
-## 3rd pre-process: outliers detection of stars variables {.flexbox .vcenter}
+## 3rd pre-process: outliers in stars features{.flexbox .vcenter}
 
 ```{r plot the stars volume relation, warning=F, message=F}
 ex_prod_dummy %>%
@@ -446,7 +453,7 @@ kable(table_mod3) %>%
 
 My model is not overfitted, but has a very low performance. Let's check where it is failing!
 
-## 3rd error check: errors visualization linear regression {.flexbox .vcenter}
+## 3rd error check: errors visualization lm {.flexbox .vcenter}
 
 ```{r error visualization 3rd model, warning=FALSE}
 # adding product number to datasets and creating one only with categories
@@ -486,7 +493,10 @@ ex_prod_dummy %>%
                label.size = NA, 
                size = 3.5) +
     geom_label(aes(x = -300, y = 2000,
-                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",round(metrics_rel_prod[[2]],3),"\n   - MAE: ",round(metrics_rel_prod[[3]],3))),
+                   label = paste0("The metrics for the relevant product types are:\n   - RMSE: ",
+                                  round(metrics_rel_prod[[1]],3),"\n   - Rsquared: ",
+                                  round(metrics_rel_prod[[2]],3),"\n   - MAE: ",
+                                  round(metrics_rel_prod[[3]],3))),
                label.size = NA,
                size = 4.5,
                colour = "red2",
